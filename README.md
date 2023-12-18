@@ -12,3 +12,6 @@ MediaPipe
 OpenCV
 Pillow (PIL)
 Tkinter
+
+**Follow the link for the dataset website**
+https://developers.google.com/mediapipe/solutions/vision/gesture_recognizer/index#models
