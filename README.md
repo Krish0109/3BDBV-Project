@@ -39,7 +39,7 @@ This Python script implements a paint application with gesture recognition using
 ```
 2. Run the script:
 ```bash
-python paint_application.py
+python gesture_recognizer.py
 ```
 3. Interact with the paint application using hand gestures.
 
