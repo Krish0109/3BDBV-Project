@@ -26,7 +26,6 @@ gesture_labels = {
     4: "Thumb_Down",
     5: "Thumb_Up",
     6: "Victory",
-    #7: "ILoveYou"
 }
 
 # Use OpenCV’s VideoCapture to start capturing from the webcam.
@@ -167,8 +166,6 @@ def start_camera():
 
         if not ret:
             break
-        # Flipping the frame to see the same side of yours
-        #frame_flipped = cv2.flip(frame, 1)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Process the frame with MediaPipe Hands
@@ -188,22 +185,49 @@ def start_camera():
                 mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
                 # Check for color assignment gestures
-                if gesture_label in [1, 2, 4, 5]:
+                if gesture_label in [1, 2, 4, 5, 6]:
                 # Update the color index based on the detected gesture
                     if gesture_label == 1:  # Closed_Fist
                         colorIndex = 3  # Yellow
                     elif gesture_label == 2:  # Open_Palm
-                        colorIndex = 0
+
                         # Clear
+                        bpoints[blue_index].clear()
+                        gpoints[green_index].clear()
+                        rpoints[red_index].clear()
+                        ypoints[yellow_index].clear()
+
+                        # Clear lines in paintWindow
+                        paintWindow = np.zeros((471, 636, 3)) + 255
+                        paintWindow = cv2.flip(paintWindow, 1)
+                        paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
+                        paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
+                        paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
+                        paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
+                        paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
+
+                        cv2.putText(paintWindow, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 2, cv2.LINE_AA)
                     elif gesture_label == 4:  # Thumb_Down
                         colorIndex = 2  # Red
                     elif gesture_label == 5:  # Thumb_Up
                         colorIndex = 1  # Green
+                    elif gesture_label == 6:
+                        colorIndex = 0
+
+                    bpoints[blue_index].clear()
+                    gpoints[green_index].clear()
+                    rpoints[red_index].clear()
+                    ypoints[yellow_index].clear()
+
 
                     # Update the previous gesture label
                     prev_gesture_label = gesture_label
 
-                if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5]:  # Pointing_Up
+                if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5, 6]:  # Pointing_Up
                     tip_of_finger = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
 
                 # Update the corresponding color points list
