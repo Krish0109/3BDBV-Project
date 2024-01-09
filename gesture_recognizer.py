@@ -7,6 +7,7 @@ import threading
 import math
 import mediapipe as mp
 import numpy as np
+import sys
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -29,7 +30,7 @@ gesture_labels = {
 }
 
 # Use OpenCV’s VideoCapture to start capturing from the webcam.
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 paintWindow = np.zeros((471, 636, 3)) + 255
 
 
@@ -114,7 +115,8 @@ yellow_index = 0
 # The kernel to be used for dilation purpose
 kernel = np.ones((5, 5), np.uint8)
 
-colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
+colors = [(230, 216, 173), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
+colors_strings = ["BLUE", "GREEN", "RED", "YELLOW"]
 colorIndex = 0
 
 # Here is code for Canvas setup
@@ -126,11 +128,16 @@ paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
 paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
 paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
 
-cv2.putText(paintWindow, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
 
 # Tkinter setup
 root = Tk()
@@ -139,7 +146,7 @@ frm.grid()
 root.title("Paint Application")
 
 label_var = StringVar()
-label_var.set("Gesture Recognition Results")
+label_var.set("Use Index finger to draw \nGesture Recognition Results")
 result_label = ttk.Label(frm, textvariable=label_var)
 result_label.grid(column=0, row=0, columnspan=2)
 
@@ -178,7 +185,8 @@ def start_camera():
                 gesture_label = classify_gesture(hand_landmarks)
 
                 # Display the recognized gesture label
-                gesture_result = f"Detected Gesture: {gesture_labels[gesture_label]}"
+                # gesture_result = f"Use Index finger to draw \nDetected Gesture: {gesture_labels[gesture_label]},Selected Colors: {colors_strings[colorIndex]}",
+                gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+" Selected Colors: "+str(colors_strings[colorIndex]),
                 update_label(gesture_result)
 
                 # Draw landmarks on the frame
@@ -206,16 +214,21 @@ def start_camera():
                         paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
                         paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
 
-                        cv2.putText(paintWindow, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
                     elif gesture_label == 4:  # Thumb_Down
                         colorIndex = 2  # Red
                     elif gesture_label == 5:  # Thumb_Up
                         colorIndex = 1  # Green
-                    elif gesture_label == 6:
+                    elif gesture_label == 6:  # Victory
                         colorIndex = 0
 
                     bpoints[blue_index].clear()
@@ -240,13 +253,13 @@ def start_camera():
                     elif colorIndex == 3:
                         ypoints[yellow_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
 
-               
+
                     center = (int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0]))
 
                 # Draw an enclosing circle around the tip of the index finger
                     circle_radius = int(frame.shape[0] * 0.1)  # 60% of the frame height
                     cv2.circle(frame, center, circle_radius, (0, 255, 0), 2)  # Example: Drawing an enclosing circle
-                
+
                 # Draw lines of all the colors on the canvas and frame
         points = [bpoints, gpoints, rpoints, ypoints]
         for i in range(len(points)):
@@ -256,7 +269,7 @@ def start_camera():
                         continue
                     cv2.line(frame, points[i][j][k - 1], points[i][j][k], colors[i], 2)
                     cv2.line(paintWindow, points[i][j][k - 1], points[i][j][k], colors[i], 2)
-                                
+
 
                 # Convert frames to Tkinter format
         tracking_image = convert_to_tkinter(frame)
@@ -279,14 +292,18 @@ def start_camera():
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
+def exitFunction():
     # Release the camera and all resources
     cap.release()
     cv2.destroyAllWindows()
     root.destroy()
+    sys.exit(0)
 
 # Start the camera in a separate thread
 camera_thread = threading.Thread(target=start_camera)
 camera_thread.start()
+
+root.protocol('WM_DELETE_WINDOW', exitFunction)  # root is your root window
 
 # Start the Tkinter main loop
 root.mainloop()
