@@ -173,6 +173,7 @@ def start_camera():
 
         if not ret:
             break
+
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Process the frame with MediaPipe Hands
@@ -205,60 +206,60 @@ def start_camera():
                         rpoints[red_index].clear()
                         ypoints[yellow_index].clear()
 
-                        # Clear lines in paintWindow
-                        paintWindow = np.zeros((471, 636, 3)) + 255
-                        paintWindow = cv2.flip(paintWindow, 1)
-                        paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
-                        paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
-                        paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
-                        paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
-                        paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
+                #         # Clear lines in paintWindow
+                #         paintWindow = np.zeros((471, 636, 3)) + 255
+                #         paintWindow = cv2.flip(paintWindow, 1)
+                #         paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
+                #         paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
+                #         paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
+                #         paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
+                #         paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
 
-                        cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                    elif gesture_label == 4:  # Thumb_Down
-                        colorIndex = 2  # Red
-                    elif gesture_label == 5:  # Thumb_Up
-                        colorIndex = 1  # Green
-                    elif gesture_label == 6:  # Victory
-                        colorIndex = 0
+                #         cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                #         cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                #     elif gesture_label == 4:  # Thumb_Down
+                #         colorIndex = 2  # Red
+                #     elif gesture_label == 5:  # Thumb_Up
+                #         colorIndex = 1  # Green
+                #     elif gesture_label == 6:  # Victory
+                #         colorIndex = 0
 
-                    bpoints[blue_index].clear()
-                    gpoints[green_index].clear()
-                    rpoints[red_index].clear()
-                    ypoints[yellow_index].clear()
-
-
-                    # Update the previous gesture label
-                    prev_gesture_label = gesture_label
-
-                if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5, 6]:  # Pointing_Up
-                    tip_of_finger = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-
-                # Update the corresponding color points list
-                    if colorIndex == 0:
-                        bpoints[blue_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
-                    elif colorIndex == 1:
-                        gpoints[green_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
-                    elif colorIndex == 2:
-                        rpoints[red_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
-                    elif colorIndex == 3:
-                        ypoints[yellow_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                #     bpoints[blue_index].clear()
+                #     gpoints[green_index].clear()
+                #     rpoints[red_index].clear()
+                #     ypoints[yellow_index].clear()
 
 
-                    center = (int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0]))
+                #     # Update the previous gesture label
+                #     prev_gesture_label = gesture_label
 
-                # Draw an enclosing circle around the tip of the index finger
-                    circle_radius = int(frame.shape[0] * 0.1)  # 60% of the frame height
-                    cv2.circle(frame, center, circle_radius, (0, 255, 0), 2)  # Example: Drawing an enclosing circle
+                # if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5, 6]:  # Pointing_Up
+                #     tip_of_finger = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+
+                # # Update the corresponding color points list
+                #     if colorIndex == 0:
+                #         bpoints[blue_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                #     elif colorIndex == 1:
+                #         gpoints[green_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                #     elif colorIndex == 2:
+                #         rpoints[red_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                #     elif colorIndex == 3:
+                #         ypoints[yellow_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+
+
+                #     center = (int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0]))
+
+                # # Draw an enclosing circle around the tip of the index finger
+                #     circle_radius = int(frame.shape[0] * 0.1)  # 60% of the frame height
+                #     cv2.circle(frame, center, circle_radius, (0, 255, 0), 2)  # Example: Drawing an enclosing circle
 
                 # Draw lines of all the colors on the canvas and frame
         points = [bpoints, gpoints, rpoints, ypoints]
