@@ -1,7 +1,8 @@
 
 # Paint Application with Gesture Recognition
 
-
+### JAN 10 2024
+ * Without drawing part. Rest code working.
 
 
 ## Overview
