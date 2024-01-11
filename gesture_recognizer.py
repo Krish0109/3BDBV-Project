@@ -8,6 +8,9 @@ import math
 import mediapipe as mp
 import numpy as np
 import sys
+from gtts import gTTS
+import os
+import time
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -160,6 +163,31 @@ tracking_label.grid(row=0, column=0, padx=10, pady=5)
 
 paint_label = Label(root)
 paint_label.grid(row=0, column=1, padx=10, pady=5)  # Use grid method
+
+def speak_gesture(gesture_label):
+    # Generate a timestamp for the audio file name
+    timestamp = int(time.time())
+
+    # Generate speech from the recognized gesture label
+    speech_text = f"Detected Gesture: {gesture_labels[gesture_label]}, Selected Color: {colors_strings[colorIndex]}"
+    tts = gTTS(text=speech_text, lang='en')
+
+    # Get the user's "Documents" folder
+    documents_folder = os.path.expanduser("~\\Documents")
+
+    # Define the filename with a timestamp
+    audio_file_name = f"gesture_speech_{timestamp}.wav"
+
+    # Define the full path to save the audio file in the "Documents" folder
+    audio_file_path = os.path.join(documents_folder, audio_file_name)
+
+    # Save the speech as an audio file in the "Documents" folder
+    tts.save(audio_file_path)
+
+    # Play the audio file
+    os.system(f"start {audio_file_path}")
+
+
 def start_camera():
     # Keep looping
     prev_gesture_label = -1
@@ -189,6 +217,9 @@ def start_camera():
                 # gesture_result = f"Use Index finger to draw \nDetected Gesture: {gesture_labels[gesture_label]},Selected Colors: {colors_strings[colorIndex]}",
                 gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+" Selected Colors: "+str(colors_strings[colorIndex]),
                 update_label(gesture_result)
+
+                # Convert the recognized gesture to speech and play it
+                speak_gesture(gesture_label)
 
                 # Draw landmarks on the frame
                 mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
