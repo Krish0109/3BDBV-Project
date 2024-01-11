@@ -57,3 +57,8 @@ The script uses a dictionary to map numerical labels to specific hand gestures:
 
 ## Acknowledgments
 This script is based on the use of MediaPipe for hand tracking. Special thanks to the contributors of the open-source libraries used in this project.
+
+## Troubleshooting:
+* Does not work on Ubuntu 20.04 or earlier!
+* python: from 3.8.x to 3.11.x
+* PIP: version 20.3+
