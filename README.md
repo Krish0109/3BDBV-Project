@@ -1,6 +1,10 @@
 
 # Paint Application with Gesture Recognition
 
+### About this feature
+* Created from the jan_10 branch
+* Implements the text-to-speech feature
+
 ### JAN 10 2024
  * Without drawing part. Rest code working.
 
