@@ -34,8 +34,19 @@ gesture_labels = {
 cap = cv2.VideoCapture(0)
 paintWindow = np.zeros((471, 636, 3)) + 255
 
-def say_text(text):
-    engine = pyttsx3.init()
+engine = pyttsx3.init()
+
+def change_voice(engine, language, gender='VoiceGenderFemale'):
+    for voice in engine.getProperty('voices'):
+        if language in voice.languages and gender == voice.gender:
+            engine.setProperty('voice', voice.id)
+            return True
+
+    raise RuntimeError("Language '{}' for gender '{}' not found".format(language, gender))
+
+
+def say_text(text):    
+    change_voice(engine, "en_US", "VoiceGenderFemale")
     engine.setProperty('rate', 150)
     while engine._inLoop:
         pass
