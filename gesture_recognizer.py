@@ -42,13 +42,13 @@ paintWindow = np.zeros((471, 636, 3)) + 255
 
 #     raise RuntimeError("Language '{}' for gender '{}' not found".format(language, gender))
 
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+engine.setProperty('rate', 150)
 
 def say_text(text):    
-    # change_voice(engine, "en_US", "VoiceGenderMale")
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[1].id)
-    engine.setProperty('rate', 150)
+    # change_voice(engine, "en_US", "VoiceGenderMale")    
     while engine._inLoop:
         pass
     engine.say(text)
