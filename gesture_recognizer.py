@@ -187,6 +187,9 @@ def speak_gesture(gesture_label):
     # Play the audio file
     os.system(f"start {audio_file_path}")
 
+    # Play the audio file in a separate thread to avoid blocking
+    threading.Thread(target=lambda: os.system(f"start {audio_file_path}")).start()
+
 
 def start_camera():
     # Keep looping
@@ -212,14 +215,17 @@ def start_camera():
 
                 # Classify the gesture based on the angle
                 gesture_label = classify_gesture(hand_landmarks)
+                
+                # Only update and speak when the gesture changes
+                if gesture_label != prev_gesture_label:
+                    prev_gesture_label = gesture_label
 
-                # Display the recognized gesture label
-                # gesture_result = f"Use Index finger to draw \nDetected Gesture: {gesture_labels[gesture_label]},Selected Colors: {colors_strings[colorIndex]}",
-                gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+" Selected Colors: "+str(colors_strings[colorIndex]),
-                update_label(gesture_result)
+                     # Display the recognized gesture label
+                    gesture_result = "Use Index finger to draw \nDetected Gesture: " + str(gesture_labels[gesture_label]) + " Selected Colors: " + str(colors_strings[colorIndex])
+                    update_label(gesture_result)
 
-                # Convert the recognized gesture to speech and play it
-                speak_gesture(gesture_label)
+                     # Convert the recognized gesture to speech and play it
+                    speak_gesture(gesture_label)
 
                 # Draw landmarks on the frame
                 mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
