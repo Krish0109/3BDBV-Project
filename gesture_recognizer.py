@@ -34,21 +34,12 @@ gesture_labels = {
 cap = cv2.VideoCapture(0)
 paintWindow = np.zeros((471, 636, 3)) + 255
 
-# def change_voice(engine, language, gender='VoiceGenderFemale'):
-#     for voice in engine.getProperty('voices'):
-#         if language in voice.languages and gender == voice.gender:
-#             engine.setProperty('voice', voice.id)
-#             return True
-
-#     raise RuntimeError("Language '{}' for gender '{}' not found".format(language, gender))
-
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
 engine.setProperty('rate', 150)
 
 def say_text(text):    
-    # change_voice(engine, "en_US", "VoiceGenderMale")    
     while engine._inLoop:
         pass
     engine.say(text)
@@ -120,6 +111,7 @@ def classify_gesture(hand_landmarks):
 
 # Convert OpenCV image to Tkinter format
 def convert_to_tkinter(image):
+    image = cv2.flip(image, 1)
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
     image = Image.fromarray(image)
     return ImageTk.PhotoImage(image=image)
