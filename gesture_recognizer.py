@@ -8,11 +8,7 @@ import math
 import mediapipe as mp
 import numpy as np
 import sys
-# from gtts import gTTS
 import pyttsx3
-import os
-import time
-import queue
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -26,11 +22,11 @@ hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5
 # Define gesture labels
 gesture_labels = {
     0: "Unknown",
-    1: "Closed Fist",
-    2: "Open Palm",
-    3: "Pointing Up",
-    4: "Thumbn Down",
-    5: "Thumb Up",
+    1: "Closed_Fist",
+    2: "Open_Palm",
+    3: "Pointing_Up",
+    4: "Thumb_Down",
+    5: "Thumb_Up",
     6: "Victory",
 }
 
@@ -38,27 +34,18 @@ gesture_labels = {
 cap = cv2.VideoCapture(0)
 paintWindow = np.zeros((471, 636, 3)) + 255
 
-# class TTSThread(threading.Thread):
-#     def __init__(self, queue):
-#         threading.Thread.__init__(self)
-#         self.queue = queue
-#         self.daemon = True
-#         self.start()
+def say_text(text):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 150)
+    while engine._inLoop:
+        pass
+    engine.say(text)
+    engine.runAndWait()
 
-#     def run(self):
-#         tts_engine = pyttsx3.init()
-#         tts_engine.startLoop(False)
-#         t_running = True
-#         while t_running:
-#             if self.queue.empty():
-#                 tts_engine.iterate()
-#             else:
-#                 data = self.queue.get()
-#                 if data == "exit":
-#                     t_running = False
-#                 else:
-#                     tts_engine.say(data)
-#         tts_engine.endLoop()
+def speak_gesture(gesture_label):
+    global colorIndex
+    speech_text = "Selected Color: " + str(colors_strings[colorIndex])
+    threading.Thread(target=say_text, args=(speech_text, )).start()
 
 def update_label(result_text):
     label_var.set(result_text)
@@ -143,7 +130,7 @@ kernel = np.ones((5, 5), np.uint8)
 
 colors = [(230, 216, 173), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
 colors_strings = ["BLUE", "GREEN", "RED", "YELLOW"]
-colorIndex = 0
+# colorIndex = 0
 
 # Here is code for Canvas setup
 paintWindow = np.zeros((471, 636, 3)) + 255
@@ -186,54 +173,6 @@ tracking_label.grid(row=0, column=0, padx=10, pady=5)
 
 paint_label = Label(root)
 paint_label.grid(row=0, column=1, padx=10, pady=5)  # Use grid method
-
-def say_text(text):
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 150)
-    while engine._inLoop:
-        pass
-    engine.say(text)
-    engine.runAndWait()
-
-def speak_gesture(gesture_label):
-#     # Generate a timestamp for the audio file name
-#     # timestamp = int(time.time())
-
-#     # Generate speech from the recognized gesture label
-    # speech_text = f"Detected Gesture: {gesture_labels[gesture_label]}, Selected Color: {colors_strings[colorIndex]}"
-    speech_text = "Selected Color: " + str(colors_strings[colorIndex])
-    threading.Thread(target=say_text, args=(speech_text, )).start()
-#     # tts = gTTS(text=speech_text, lang='en')
-
-#     timer = threading.Timer(20, second,args=[name]) 
-#     timer.start()
-
-#     engine = pyttsx3.init()
-#     engine.say('I see '+name)
-#     engine.runAndWait()
-
-    # q.put(speech_text)
-
-    # engine.say(speech_text)
-    # engine.runAndWait()    
-
-
-    # Get the user's "Documents" folder
-    # documents_folder = os.path.expanduser("~\\Documents")
-
-    # # Define the filename with a timestamp
-    # audio_file_name = f"gesture_speech_{timestamp}.wav"
-
-    # # Define the full path to save the audio file in the "Documents" folder
-    # audio_file_path = os.path.join(documents_folder, audio_file_name)
-
-    # # Save the speech as an audio file in the "Documents" folder
-    # tts.save(audio_file_path)
-
-    # # Play the audio file
-    # os.system(f"start {audio_file_path}")
-
-
 def start_camera():
     # Keep looping
     prev_gesture_label = -1
@@ -248,7 +187,6 @@ def start_camera():
 
         if not ret:
             break
-
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Process the frame with MediaPipe Hands
@@ -264,7 +202,7 @@ def start_camera():
                 # gesture_result = f"Use Index finger to draw \nDetected Gesture: {gesture_labels[gesture_label]},Selected Colors: {colors_strings[colorIndex]}",
                 gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+" Selected Colors: "+str(colors_strings[colorIndex]),
                 update_label(gesture_result)
-
+                
                 # Draw landmarks on the frame
                 mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
@@ -274,7 +212,7 @@ def start_camera():
                     if gesture_label == 1:  # Closed_Fist
                         colorIndex = 3  # Yellow
                     elif gesture_label == 2:  # Open_Palm
-                        
+
                         # Clear
                         bpoints[blue_index].clear()
                         gpoints[green_index].clear()
@@ -307,27 +245,20 @@ def start_camera():
                     elif gesture_label == 6:  # Victory
                         colorIndex = 0
 
+                    if gesture_label != prev_gesture_label:
+                        if gesture_label != 0 and gesture_label != 3:  # Check if the gesture is not unknown
+                        # Call the speech function for all gestures except unknown
+                            speak_gesture(gesture_label)   
+
+
                     bpoints[blue_index].clear()
                     gpoints[green_index].clear()
                     rpoints[red_index].clear()
                     ypoints[yellow_index].clear()
 
 
-
-                # Draw lines of all the colors on the canvas and frame
-                    # Display the recognized gesture label
-                # gesture_result = f"Use Index finger to draw \nDetected Gesture: {gesture_labels[gesture_label]},Selected Colors: {colors_strings[colorIndex]}",
-                gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+" Selected Colors: "+str(colors_strings[colorIndex]),
-                update_label(gesture_result)
-
-                # Convert the recognized gesture to speech and play it
-                if gesture_label != prev_gesture_label:
-                    if gesture_label != 0 and gesture_label != 3:  # Check if the gesture is not unknown
-                        # Call the speech function for all gestures except unknown
-                        speak_gesture(gesture_label)                        
-
                     # Update the previous gesture label
-                prev_gesture_label = gesture_label
+                    prev_gesture_label = gesture_label
 
                 if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5, 6]:  # Pointing_Up
                     tip_of_finger = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
@@ -388,14 +319,9 @@ def exitFunction():
     root.destroy()
     sys.exit(0)
 
-# q = queue.Queue()
-# tts_thread = TTSThread(q)  # note: thread is auto-starting
-
 # Start the camera in a separate thread
 camera_thread = threading.Thread(target=start_camera)
 camera_thread.start()
-
-# create a queue to send commands from the main thread
 
 root.protocol('WM_DELETE_WINDOW', exitFunction)  # root is your root window
 
