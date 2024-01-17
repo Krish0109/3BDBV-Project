@@ -9,6 +9,7 @@ import mediapipe as mp
 import numpy as np
 import sys
 import pyttsx3
+from time import sleep
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -159,6 +160,25 @@ cv2.putText(paintWindow_panel, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX
 cv2.putText(paintWindow_panel, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
 cv2.putText(paintWindow_panel, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
 
+def exitFunction():
+    # Release the camera and all resources
+    cap.release()
+    cv2.destroyAllWindows()
+    # root.destroy()
+    sys.exit(0)
+
+splash_root = Tk()
+splash_root.title("Shit")
+splash_root.geometry("700x700")
+
+splash_label = Label(
+splash_root, text="Welcome to \nShit", font='times 20 bold', bg="white")
+splash_label.pack(pady=20)
+
+splash_root.after(5000,splash_root.destroy) #after(ms,func)
+splash_root.protocol('WM_DELETE_WINDOW', exitFunction) 
+splash_root.mainloop()
+
 # Tkinter setup
 root = Tk()
 frm = ttk.Frame(root, padding=10)
@@ -233,22 +253,7 @@ def start_camera():
                         # Clear lines in paintWindow
                         paintWindow = np.zeros((471, 636, 3)) + 255
                         paintWindow = cv2.flip(paintWindow, 1)
-                        # paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
-                        # paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
-                        # paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
-                        # paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
-                        # paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
-
-                        # cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        # cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        
                     elif gesture_label == 4:  # Thumb_Down
                         colorIndex = 2  # Red
                     elif gesture_label == 5:  # Thumb_Up
@@ -257,7 +262,7 @@ def start_camera():
                         colorIndex = 0
 
                     if gesture_label != prev_gesture_label:
-                        if gesture_label != 0 and gesture_label != 3:  # Check if the gesture is not unknown
+                        if gesture_label != 0 and gesture_label != 2 and gesture_label != 3 :  # Check if the gesture is not unknown
                         # Call the speech function for all gestures except unknown
                             speak_gesture(gesture_label)   
 
@@ -317,7 +322,7 @@ def start_camera():
         paint_label_panel.config(image=paint_image_panel)
         paint_label_panel.image = paint_image_panel
 
-                # Update Tkinter window
+        # Update Tkinter window
         root.update()
 
         #quit_button = Button(frm, text="Quit", command=root.destroy)
@@ -327,18 +332,11 @@ def start_camera():
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
-def exitFunction():
-    # Release the camera and all resources
-    cap.release()
-    cv2.destroyAllWindows()
-    root.destroy()
-    sys.exit(0)
-
 # Start the camera in a separate thread
 camera_thread = threading.Thread(target=start_camera)
 camera_thread.start()
 
-root.protocol('WM_DELETE_WINDOW', exitFunction)  # root is your root window
+root.protocol('WM_DELETE_WINDOW', exitFunction) 
 
 # Start the Tkinter main loop
 root.mainloop()
