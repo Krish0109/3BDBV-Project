@@ -47,7 +47,7 @@ def say_text(text):
     # change_voice(engine, "en_US", "VoiceGenderMale")
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[1])
+    engine.setProperty('voice', voices[1].id)
     engine.setProperty('rate', 150)
     while engine._inLoop:
         pass
