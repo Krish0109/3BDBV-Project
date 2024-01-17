@@ -33,6 +33,7 @@ gesture_labels = {
 # Use OpenCV’s VideoCapture to start capturing from the webcam.
 cap = cv2.VideoCapture(0)
 paintWindow = np.zeros((471, 636, 3)) + 255
+paintWindow_panel = np.zeros((65, 636, 3)) + 255
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -110,8 +111,9 @@ def classify_gesture(hand_landmarks):
         return 0  # Unknown
 
 # Convert OpenCV image to Tkinter format
-def convert_to_tkinter(image):
-    image = cv2.flip(image, 1)
+def convert_to_tkinter(image, flip = False):
+    if flip:
+        image = cv2.flip(image, 1)    
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
     image = Image.fromarray(image)
     return ImageTk.PhotoImage(image=image)
@@ -139,22 +141,23 @@ colors_strings = ["BLUE", "GREEN", "RED", "YELLOW"]
 # Here is code for Canvas setup
 paintWindow = np.zeros((471, 636, 3)) + 255
 paintWindow = cv2.flip(paintWindow, 1)
-paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
-paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
-paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
-paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
-paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
 
-cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+paintWindow_panel = cv2.rectangle(paintWindow_panel, (40, 1), (140, 65), (0, 0, 0), 2)
+paintWindow_panel = cv2.rectangle(paintWindow_panel, (160, 1), (255, 65), colors[0], -1)
+paintWindow_panel = cv2.rectangle(paintWindow_panel, (275, 1), (370, 65), colors[1], -1)
+paintWindow_panel = cv2.rectangle(paintWindow_panel, (390, 1), (485, 65), colors[2], -1)
+paintWindow_panel = cv2.rectangle(paintWindow_panel, (505, 1), (600, 65), colors[3], -1)
+
+cv2.putText(paintWindow_panel, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow_panel, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
 
 # Tkinter setup
 root = Tk()
@@ -177,6 +180,10 @@ tracking_label.grid(row=0, column=0, padx=10, pady=5)
 
 paint_label = Label(root)
 paint_label.grid(row=0, column=1, padx=10, pady=5)  # Use grid method
+
+paint_label_panel = Label(root)
+paint_label_panel.grid(row=1, column=0, padx=10, pady=5)  # Use grid method
+
 def start_camera():
     # Keep looping
     prev_gesture_label = -1
@@ -226,22 +233,22 @@ def start_camera():
                         # Clear lines in paintWindow
                         paintWindow = np.zeros((471, 636, 3)) + 255
                         paintWindow = cv2.flip(paintWindow, 1)
-                        paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
-                        paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
-                        paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
-                        paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
-                        paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
+                        # paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
+                        # paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
+                        # paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
+                        # paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
+                        # paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
 
-                        cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                        cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        # cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
                     elif gesture_label == 4:  # Thumb_Down
                         colorIndex = 2  # Red
                     elif gesture_label == 5:  # Thumb_Up
@@ -296,8 +303,9 @@ def start_camera():
 
 
                 # Convert frames to Tkinter format
-        tracking_image = convert_to_tkinter(frame)
-        paint_image = convert_to_tkinter(paintWindow)
+        tracking_image = convert_to_tkinter(frame, flip=True)
+        paint_image = convert_to_tkinter(paintWindow, flip=True)
+        paint_image_panel = convert_to_tkinter(paintWindow_panel)
 
                 # Update labels with new images
         tracking_label.config(image=tracking_image)
@@ -305,6 +313,9 @@ def start_camera():
 
         paint_label.config(image=paint_image)
         paint_label.image = paint_image
+
+        paint_label_panel.config(image=paint_image_panel)
+        paint_label_panel.image = paint_image_panel
 
                 # Update Tkinter window
         root.update()
