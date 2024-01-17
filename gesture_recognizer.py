@@ -38,28 +38,6 @@ gesture_labels = {
 cap = cv2.VideoCapture(0)
 paintWindow = np.zeros((471, 636, 3)) + 255
 
-# class TTSThread(threading.Thread):
-#     def __init__(self, queue):
-#         threading.Thread.__init__(self)
-#         self.queue = queue
-#         self.daemon = True
-#         self.start()
-
-#     def run(self):
-#         tts_engine = pyttsx3.init()
-#         tts_engine.startLoop(False)
-#         t_running = True
-#         while t_running:
-#             if self.queue.empty():
-#                 tts_engine.iterate()
-#             else:
-#                 data = self.queue.get()
-#                 if data == "exit":
-#                     t_running = False
-#                 else:
-#                     tts_engine.say(data)
-#         tts_engine.endLoop()
-
 def update_label(result_text):
     label_var.set(result_text)
 
@@ -196,43 +174,11 @@ def say_text(text):
     engine.runAndWait()
 
 def speak_gesture(gesture_label):
-#     # Generate a timestamp for the audio file name
-#     # timestamp = int(time.time())
-
 #     # Generate speech from the recognized gesture label
     # speech_text = f"Detected Gesture: {gesture_labels[gesture_label]}, Selected Color: {colors_strings[colorIndex]}"
     speech_text = "Selected Color: " + str(colors_strings[colorIndex])
     threading.Thread(target=say_text, args=(speech_text, )).start()
 #     # tts = gTTS(text=speech_text, lang='en')
-
-#     timer = threading.Timer(20, second,args=[name]) 
-#     timer.start()
-
-#     engine = pyttsx3.init()
-#     engine.say('I see '+name)
-#     engine.runAndWait()
-
-    # q.put(speech_text)
-
-    # engine.say(speech_text)
-    # engine.runAndWait()    
-
-
-    # Get the user's "Documents" folder
-    # documents_folder = os.path.expanduser("~\\Documents")
-
-    # # Define the filename with a timestamp
-    # audio_file_name = f"gesture_speech_{timestamp}.wav"
-
-    # # Define the full path to save the audio file in the "Documents" folder
-    # audio_file_path = os.path.join(documents_folder, audio_file_name)
-
-    # # Save the speech as an audio file in the "Documents" folder
-    # tts.save(audio_file_path)
-
-    # # Play the audio file
-    # os.system(f"start {audio_file_path}")
-
 
 def start_camera():
     # Keep looping
@@ -278,25 +224,25 @@ def start_camera():
                         rpoints[red_index].clear()
                         ypoints[yellow_index].clear()
 
-                #         # Clear lines in paintWindow
-                #         paintWindow = np.zeros((471, 636, 3)) + 255
-                #         paintWindow = cv2.flip(paintWindow, 1)
-                #         paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
-                #         paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
-                #         paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
-                #         paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
-                #         paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
+                        # Clear lines in paintWindow
+                        paintWindow = np.zeros((471, 636, 3)) + 255
+                        paintWindow = cv2.flip(paintWindow, 1)
+                        paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
+                        paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), colors[0], -1)
+                        paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), colors[1], -1)
+                        paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), colors[2], -1)
+                        paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), colors[3], -1)
 
-                #         cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                #         cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "CLEAR", (50, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Open Palm", (50, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "BLUE", (170, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Victory V", (170, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "GREEN", (285, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Thumb Up", (285, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "RED", (400, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Thumb Down", (400, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "YELLOW", (515, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                        cv2.putText(paintWindow, "Closed Fist", (515, 53), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
                     elif gesture_label == 4:  # Thumb_Down
                         colorIndex = 2  # Red
                     elif gesture_label == 5:  # Thumb_Up
@@ -304,34 +250,34 @@ def start_camera():
                     elif gesture_label == 6:  # Victory
                         colorIndex = 0
 
-                #     bpoints[blue_index].clear()
-                #     gpoints[green_index].clear()
-                #     rpoints[red_index].clear()
-                #     ypoints[yellow_index].clear()
+                    bpoints[blue_index].clear()
+                    gpoints[green_index].clear()
+                    rpoints[red_index].clear()
+                    ypoints[yellow_index].clear()
 
 
-                #     # Update the previous gesture label
-                    #prev_gesture_label = gesture_label
+                    # Update the previous gesture label
+                    prev_gesture_label = gesture_label
 
-                # if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5, 6]:  # Pointing_Up
-                    #tip_of_finger = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                if gesture_label == 3 and prev_gesture_label in [1, 2, 4, 5, 6]:  # Pointing_Up
+                    tip_of_finger = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
 
-                # # Update the corresponding color points list
-                #     if colorIndex == 0:
-                #         bpoints[blue_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
-                #     elif colorIndex == 1:
-                #         gpoints[green_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
-                #     elif colorIndex == 2:
-                #         rpoints[red_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
-                #     elif colorIndex == 3:
-                #         ypoints[yellow_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                # Update the corresponding color points list
+                    if colorIndex == 0:
+                        bpoints[blue_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                    elif colorIndex == 1:
+                        gpoints[green_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                    elif colorIndex == 2:
+                        rpoints[red_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
+                    elif colorIndex == 3:
+                        ypoints[yellow_index].appendleft((int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0])))
 
 
-                #     center = (int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0]))
+                    center = (int(tip_of_finger.x * frame.shape[1]), int(tip_of_finger.y * frame.shape[0]))
 
-                # # Draw an enclosing circle around the tip of the index finger
-                #     circle_radius = int(frame.shape[0] * 0.1)  # 60% of the frame height
-                #     cv2.circle(frame, center, circle_radius, (0, 255, 0), 2)  # Example: Drawing an enclosing circle
+                # Draw an enclosing circle around the tip of the index finger
+                    circle_radius = int(frame.shape[0] * 0.1)  # 60% of the frame height
+                    cv2.circle(frame, center, circle_radius, (0, 255, 0), 2)  # Example: Drawing an enclosing circle
 
                 # Draw lines of all the colors on the canvas and frame
                     # Display the recognized gesture label
@@ -387,9 +333,6 @@ def exitFunction():
     cv2.destroyAllWindows()
     root.destroy()
     sys.exit(0)
-
-# q = queue.Queue()
-# tts_thread = TTSThread(q)  # note: thread is auto-starting
 
 # Start the camera in a separate thread
 camera_thread = threading.Thread(target=start_camera)
