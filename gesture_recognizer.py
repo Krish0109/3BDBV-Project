@@ -53,7 +53,8 @@ def speak_gesture(gesture_label):
     threading.Thread(target=say_text, args=(speech_text, )).start()
 
 def update_label(result_text):
-    label_var.set(result_text)
+    global label_panel
+    label_panel.configure(text = result_text)
 
 def calculate_angle(point1, point2):
     angle_rad = math.atan2(point2.y - point1.y, point2.x - point1.x)
@@ -164,35 +165,59 @@ def exitFunction():
     # Release the camera and all resources
     cap.release()
     cv2.destroyAllWindows()
-    # root.destroy()
+    # name.destroy()
     sys.exit(0)
 
-splash_root = Tk()
-splash_root.title("Shit")
-splash_root.geometry("700x700")
+bg_color = 'orange'
 
-splash_label = Label(
-splash_root, text="Welcome to \nShit", font='times 20 bold', bg="white")
+splash_root = Tk()
+splash_root.title("Air Canvas")
+splash_root.geometry("900x700")
+splash_root.configure(background=bg_color)
+
+logo = Image.open('design_6.png')
+logo_resized = logo.resize((100, 100))
+logo = ImageTk.PhotoImage(logo_resized)
+
+splash_label_logo = Label(splash_root, image=logo)
+splash_label_logo.pack()
+
+splash_label = Label(splash_root, text="Welcome to \nAir Canvas", font='times 20 bold', bg=bg_color)
 splash_label.pack(pady=20)
 
-splash_root.after(5000,splash_root.destroy) #after(ms,func)
+splash_topic = Label(splash_root, text="Mensch-Roboter-Interaktion (HRI) mit Gestenerkennung: \n",font='times 20 bold', bg=bg_color )
+splash_topic.pack(pady=20)
+
+splash_topic_desc = Label(splash_root, text=" Mensch-Roboter-Interaktion (HRI) mit Gestenerkennung: \n Entwicklung von Systemen, die es Robotern ermöglichen, \n menschliche Gesten zu erkennen und darauf zu reagieren, um eine \n natürlichere Interaktion zu ermöglichen.\n",\
+                     font='times 15', bg=bg_color)
+splash_topic_desc.pack()
+
+splash_guided_by_name = Label(splash_root, text="Guided by: Prof. Dipl.-Inf. Ingrid Scholl ", font='times 20', bg=bg_color)
+splash_guided_by_name.pack(pady=10)
+
+splash_team_names = Label(splash_root,justify="left", anchor="w", text=" Team: \n Florisa Zanier \txxxxxxxx \n Sameer Tuteja \t3296444 \n Venkata Gopi Krishna Miriyala \txxxxxxxx", font='times 20 ', bg=bg_color)
+splash_team_names.pack()
+
+B = Button(splash_root, text ="Continue to app", command = splash_root.destroy)
+B.pack(pady=10)
+
+splash_root.after(10000,splash_root.destroy) #after(ms,func)
 splash_root.protocol('WM_DELETE_WINDOW', exitFunction) 
 splash_root.mainloop()
 
 # Tkinter setup
 root = Tk()
+root.title("Air Canvas")
 frm = ttk.Frame(root, padding=10)
 frm.grid()
-root.title("Paint Application")
 
-label_var = StringVar()
-label_var.set("Use Index finger to draw \nGesture Recognition Results")
-result_label = ttk.Label(frm, textvariable=label_var)
-result_label.grid(column=0, row=0, columnspan=2)
+label_var = "Use Index finger to draw \nGesture Recognition Results"
 
 
 canvas = Canvas(frm, width=640, height=480)
 canvas.grid(column=0, row=3, columnspan=2)
+# result_label = ttk.Label(frm, textvariable=label_var)
+# result_label.grid(column=0, row=0, columnspan=2)
 
 # Create labels to display frames
 tracking_label = Label(root, height=450)  # Adjust the height value as needed
@@ -203,6 +228,9 @@ paint_label.grid(row=0, column=1, padx=10, pady=5)  # Use grid method
 
 paint_label_panel = Label(root)
 paint_label_panel.grid(row=1, column=0, padx=10, pady=5)  # Use grid method
+
+label_panel = Label(root, text=label_var)
+label_panel.grid(row=1, column=1, padx=10, pady=5)  # Use grid method
 
 def start_camera():
     # Keep looping
@@ -231,7 +259,7 @@ def start_camera():
 
                 # Display the recognized gesture label
                 # gesture_result = f"Use Index finger to draw \nDetected Gesture: {gesture_labels[gesture_label]},Selected Colors: {colors_strings[colorIndex]}",
-                gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+" Selected Colors: "+str(colors_strings[colorIndex]),
+                gesture_result = "Use Index finger to draw \nDetected Gesture: "+str(gesture_labels[gesture_label])+"\n Selected Color: "+str(colors_strings[colorIndex]),
                 update_label(gesture_result)
                 
                 # Draw landmarks on the frame
@@ -326,11 +354,7 @@ def start_camera():
         root.update()
 
         #quit_button = Button(frm, text="Quit", command=root.destroy)
-        #quit_button.grid(column=1, row=1, sticky=E)
-
-        # If the 'q' key is pressed then stop the application
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+        #quit_button.grid(column=1, row=1, sticky=E)        
 
 # Start the camera in a separate thread
 camera_thread = threading.Thread(target=start_camera)
