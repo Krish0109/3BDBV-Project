@@ -201,7 +201,7 @@ splash_team_names.pack()
 B = Button(splash_root, text ="Continue to app", command = splash_root.destroy)
 B.pack(pady=10)
 
-splash_root.after(10000,splash_root.destroy) #after(ms,func)
+splash_root.after(20000,splash_root.destroy) #after(ms,func)
 splash_root.protocol('WM_DELETE_WINDOW', exitFunction) 
 splash_root.mainloop()
 
