@@ -195,7 +195,7 @@ splash_topic_desc.pack()
 splash_guided_by_name = Label(splash_root, text="Guided by: Prof. Dipl.-Inf. Ingrid Scholl ", font='times 20', bg=bg_color)
 splash_guided_by_name.pack(pady=10)
 
-splash_team_names = Label(splash_root,justify="left", anchor="w", text=" Team: \n Florisa Zanier \txxxxxxxx \n Sameer Tuteja \t3296444 \n Venkata Gopi Krishna Miriyala \txxxxxxxx", font='times 20 ', bg=bg_color)
+splash_team_names = Label(splash_root,justify="left", anchor="w", text=" Team: \n Florisa Zanier \txxxxxxxx \n Sameer Tuteja \t3296444 \n Venkata Gopi Krishna Miriyala \t3601156", font='times 20 ', bg=bg_color)
 splash_team_names.pack()
 
 B = Button(splash_root, text ="Continue to app", command = splash_root.destroy)
