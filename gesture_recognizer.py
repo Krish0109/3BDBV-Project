@@ -7,7 +7,7 @@ import threading
 import math
 import mediapipe as mp
 import numpy as np
-import sys
+import sys, os, signal
 import pyttsx3
 from datetime import datetime
 
@@ -181,8 +181,26 @@ def exitFunction():
     # Release the camera and all resources
     cap.release()
     cv2.destroyAllWindows()
-    # name.destroy()
-    sys.exit(0)
+    print ("Bye...")    
+    try:
+        root.destroy()
+    except:
+        pass
+    try:
+        print("from sys")
+        sys.exit(0)
+    except:
+        pass
+    try:
+        print("from windows os")
+        os._exit(0)
+    except:
+        pass
+    try:
+        print("from linux os")
+        os.kill(os.getpid(), signal.SIGINT)
+    except:
+        pass
 
 bg_color = 'orange'
 
