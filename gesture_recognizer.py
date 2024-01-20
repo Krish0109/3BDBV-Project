@@ -9,7 +9,7 @@ import mediapipe as mp
 import numpy as np
 import sys
 import pyttsx3
-from time import sleep
+from datetime import datetime
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -46,6 +46,22 @@ def say_text(text):
         pass
     engine.say(text)
     engine.runAndWait()
+
+image_saved = False
+
+def image_save_called():
+    global image_saved
+    image_saved = True
+
+def save_image(image_input):
+    global image_saved
+
+    now = datetime.now()
+    current_time = now.strftime("%d_%m_%Y_%H_%M_%S")
+    cv2.imwrite('paint_window_'+current_time+'.png', image_input) 
+
+    # image_input.save("img1.png","PNG")
+    image_saved = False
 
 def speak_gesture(gesture_label):
     global colorIndex
@@ -195,7 +211,7 @@ splash_topic_desc.pack()
 splash_guided_by_name = Label(splash_root, text="Guided by: Prof. Dipl.-Inf. Ingrid Scholl ", font='times 20', bg=bg_color)
 splash_guided_by_name.pack(pady=10)
 
-splash_team_names = Label(splash_root,justify="left", anchor="w", text=" Team: \n Florisa Zanier \txxxxxxxx \n Sameer Tuteja \t3296444 \n Venkata Gopi Krishna Miriyala \t3601156", font='times 20 ', bg=bg_color)
+splash_team_names = Label(splash_root,justify="left", anchor="w", text=" Team: \n Florisa Zanier \t\t\t3613450 \n Sameer Tuteja \t\t\t3296444 \n Venkata Gopi Krishna Miriyala \t3601156", font='times 20 ', bg=bg_color)
 splash_team_names.pack()
 
 B = Button(splash_root, text ="Continue to app", command = splash_root.destroy)
@@ -229,8 +245,17 @@ paint_label.grid(row=0, column=1, padx=10, pady=5)  # Use grid method
 paint_label_panel = Label(root)
 paint_label_panel.grid(row=1, column=0, padx=10, pady=5)  # Use grid method
 
-label_panel = Label(root, text=label_var)
-label_panel.grid(row=1, column=1, padx=10, pady=5)  # Use grid method
+right_bottom_pannel = Frame(root)
+right_bottom_pannel.grid(row=1, column=1, padx=10, pady=5)  # Use grid method
+
+label_panel = Label(right_bottom_pannel, text=label_var)
+label_panel.grid(row=0, column=0, padx=10, pady=5)  # Use grid method
+
+save_image_panel = Button(right_bottom_pannel, text="Save image", command=image_save_called)
+save_image_panel.grid(row=1, column=0, padx=10, pady=5)  # Use grid method
+
+exit_panel = Button(right_bottom_pannel, text="Exit", command=exitFunction)
+exit_panel.grid(row=1, column=1, padx=10, pady=5)  # Use grid method
 
 def start_camera():
     # Keep looping
@@ -349,6 +374,9 @@ def start_camera():
 
         paint_label_panel.config(image=paint_image_panel)
         paint_label_panel.image = paint_image_panel
+
+        if image_saved:
+            save_image(paintWindow)
 
         # Update Tkinter window
         root.update()
