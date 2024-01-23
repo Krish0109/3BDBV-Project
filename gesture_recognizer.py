@@ -58,7 +58,8 @@ def save_image(image_input):
 
     now = datetime.now()
     current_time = now.strftime("%d_%m_%Y_%H_%M_%S")
-    cv2.imwrite('paint_window_'+current_time+'.png', image_input) 
+    image = cv2.flip(image_input, 1)    
+    cv2.imwrite('paint_window_'+current_time+'.png', image) 
 
     # image_input.save("img1.png","PNG")
     image_saved = False
