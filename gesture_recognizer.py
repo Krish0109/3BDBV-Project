@@ -210,7 +210,7 @@ splash_root.title("Air Canvas")
 splash_root.geometry("900x700")
 splash_root.configure(background=bg_color)
 
-logo = Image.open('design_6.png')
+logo = Image.open('Images/design_6.png')
 logo_resized = logo.resize((100, 100))
 logo = ImageTk.PhotoImage(logo_resized)
 

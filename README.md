@@ -1,17 +1,11 @@
 
 # Paint Application with Gesture Recognition
 
-### About this feature
-* Created from the jan_10 branch
-* Implements the text-to-speech feature
-
-### JAN 10 2024
- * Without drawing part. Rest code working.
-
-
 ## Overview
 
 This Python script implements a paint application with gesture recognition using the MediaPipe library. The application captures video from the webcam, detects hand gestures, and allows users to draw on a canvas using different colors based on specific hand gestures.
+
+![Sample RVIZ2](Images/demo_image.png?raw=true "Demo Image")
 
 ## Features
 
@@ -40,7 +34,7 @@ This Python script implements a paint application with gesture recognition using
 
 1. Install the required dependencies:
 ```bash
-  pip install opencv-python mediapipe pillow numpy
+  pip install opencv-python mediapipe pillow numpy pyttsx3 
 ```
 2. Run the script:
 ```bash
